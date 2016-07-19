@@ -1,0 +1,182 @@
+<!doctype html>
+<!-- Kcards was written by Simon Anthony, Tortoisesoft Enterprises, kcards@torty.org.uk Open Source - but give me a credit ! -->
+<html class="no-js" lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Kcards - do it yourself photo mixer and panorama display</title>
+	<meta http-equiv="Cache-control" content="private">
+	<!--<link rel="stylesheet" href="css/app.css">-->
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<script>document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1"></' + 'script>')</script>
+<script src="js/angular.min.js"></script>
+<script src="js/vars.js"></script>
+<script type="text/javascript" src="js/shake.js"></script>
+<script src="js/jquery.min.js"></script>
+<script src="js/myapp.js"></script>
+<script>
+	function theController($scope) {
+		$scope.update = angular.copy.pic;
+		$scope.update = angular.copy.img;
+	}
+</script>
+
+
+<body ng-app="myApp">
+	<div ng-controller="formCtrl">
+		<script type="text/javascript">
+			window.onload = function() {
+				var myShakeEvent = new Shake({
+					threshold: 3
+				});
+				myShakeEvent.start();
+				window.addEventListener('shake', shakeEventDidOccur, false);
+
+				function shakeEventDidOccur() {
+					toggle_setup();
+				}
+			};
+		</script>
+
+		<div id="buttons">
+			<span class="desktop">
+			<button  id="button3" onclick="minus_one()">Minus one</button>
+			<br>
+			<button id="button2" onclick="plus_one()">Plus one</button>
+			</span>
+			<br>
+			<br>
+			<select ng-model="selectedSetName" ng-change="save_json()" ng-init="selectedSetName='Set0'" value="Set0">
+				<option value="Set0">Set 0</option>
+				<option value="Set1">Set 1</option>
+				<option value="Set2">Set 2</option>
+				<option value="Set3">Set 3</option>
+				<option value="Set4">Set 4</option>
+				<option value="{{SetName}}">{{SetName}}</option>
+			</select>
+			<br>
+			<input type="text" ng-model="SetName" placeholder="Create new set" ng-init="SetName='YourSet'" id="yourset" value="Your Set">
+			<br>
+
+			<button ng-click="loadlocalpics()">Load {{selectedSetName}}</button>
+			<br>
+			<button ng-click="savelocalpics()">Save {{selectedSetName}}</button>
+			<br>
+			<br>	<span class="desktop setup">
+			<button id="button0" onclick="toggle_setup()">Setup</button>
+			<br>		</span>
+			<button id="button4" onclick="toggle_input()">Input select</button>
+			<br>
+			<br>
+			<button id="button1" ng-click="flush()">Clear {{selectedSetName}}</button>
+		</div>
+
+		<div class="message">{{msg}}</div>
+
+		<div class="container">
+			<div class="container00" style="background: transparent url('{{pic0}}') repeat scroll center top / cover;">
+				<article class="input_boxes">
+					<input onchange="handleFiles(this.files,0)" type="file" accept="image/*" style="display: none; visibility: hidden;" id="myFileInput0" />
+					<input class="setup" type="text" ng-model="pic0" placeholder="WELCOME TO KCARDS" ng-change="setHtmlImage(0,pic0)">
+					<button class="setupBTN" type="button" onclick="$('#myFileInput0').trigger('click');"><b>WELCOME TO KCARDS</b> ! {{selectedSetName}} </button>
+					<span id="00"></span>
+				</article>
+
+
+				<div class="container01" style="background: transparent url('{{pic1}}') repeat scroll center top / cover;">
+					<article class="input_boxes">
+						<input onchange="handleFiles(this.files,1)" type="file" accept="image/*" style="display: none; visibility: hidden;" id="myFileInput1" />
+						<input class="setup" type="text" ng-model="pic1" placeholder="Copy a URL from a browser" ng-change="setHtmlImage(1,pic1)">
+						<button class="setupBTN" type="button" onclick="$('#myFileInput1').trigger('click');">Tap a tab to select or take a pic</button>
+						<span id="01"></span>
+					</article>
+
+					<div class="container02" style="background: transparent url('{{pic2}}') repeat scroll center top / cover;">
+						<article class="input_boxes">
+							<input onchange="handleFiles(this.files,2)" type="file" accept="image/*" style="display: none; visibility: hidden;" id="myFileInput2" />
+							<input class="setup" type="text" ng-model="pic2" placeholder="Firefox: 'Copy Image Location'" ng-change="setHtmlImage(2,pic2)">
+							<button class="setupBTN" type="button" onclick="$('#myFileInput2').trigger('click');">Shake to remove this setup screen</button>
+							<span id="02"></span>
+						</article>
+
+						<div class="container03" style="background: transparent url('{{pic3}}') repeat scroll center top / cover;">
+
+							<article class="input_boxes">
+								<input onchange="handleFiles(this.files,3)" type="file" accept="image/*" style="display: none; visibility: hidden;" id="myFileInput3" />
+								<input class="setup" type="text" ng-model="pic3" placeholder="Chrome: 'Copy Image Address'" ng-change="setHtmlImage(3,pic3)">
+								<button class="setupBTN" type="button" onclick="$('#myFileInput3').trigger('click');">Tilt the mobile to see all the pics !</button>
+								<span id="03"></span>
+							</article>
+
+							<div class="container04" style="background: transparent url('{{pic4}}') repeat scroll center top / cover;">
+								<article class="input_boxes">
+									<input onchange="handleFiles(this.files,4)" type="file" accept="image/*" style="display: none; visibility: hidden;" id="myFileInput4" />
+									<input class="setup" type="text" ng-model="pic4" placeholder="Safari: 'Copy Image Address'" ng-change="setHtmlImage(4,pic4)">
+									<button class="setupBTN" type="button" onclick="$('#myFileInput4').trigger('click');">Chose either tall OR wide images</button>
+									<span id="04"></span>
+								</article>
+								<div class="container05" style="background: transparent url('{{pic5}}') repeat scroll center top / cover;">
+									<article class="input_boxes">
+										<input onchange="handleFiles(this.files,5)" type="file" accept="image/*" style="display: none; visibility: hidden;" id="myFileInput5" />
+										<input class="setup" type="text" ng-model="pic5" placeholder="Microsoft Edge: 'Copy' image" ng-change="setHtmlImage(5,pic5)">
+										<button class="setupBTN" type="button" onclick="$('#myFileInput5').trigger('click');">A mixture of tall and wide won't fit</button>
+										<span id="05"></span>
+									</article>
+
+									<div class="container06" style="background: transparent url('{{pic6}}') repeat scroll center top / cover;">
+										<article class="input_boxes">
+											<input onchange="handleFiles(this.files,6)" type="file" accept="image/*" style="display: none; visibility: hidden;" id="myFileInput6" />
+											<input class="setup" type="text" ng-model="pic6" placeholder="Internet Explorer: 'Copy' image" ng-change="setHtmlImage(6,pic6)">
+											<button class="setupBTN" type="button" onclick="$('#myFileInput6').trigger('click');">Choose images with a central subject</button>
+											<span id="06"></span>
+										</article>
+
+										<div class="container07" style="background: transparent url('{{pic7}}') repeat scroll center top / cover;">
+											<article class="input_boxes">
+												<input onchange="handleFiles(this.files,7)" type="file" accept="image/*" style="display: none; visibility: hidden;" id="myFileInput7" />
+												<input class="setup" type="text" ng-model="pic7" placeholder="Chose either tall OR wide images." ng-change="setHtmlImage(7,pic7)">
+												<button class="setupBTN" type="button" onclick="$('#myFileInput7').trigger('click');">Created by Simon Anthony</button>
+												<span id="07"></span>
+											</article>
+
+											<div class="container08" style="background: transparent url('{{pic8}}') repeat scroll center top / cover;">
+												<article class="input_boxes">
+													<input onchange="handleFiles(this.files,8)" type="file" accept="image/*" style="display: none; visibility: hidden;" id="myFileInput8" />
+													<input class="setup" type="text" ng-model="pic8" placeholder="Chose either tall OR wide images." ng-change="setHtmlImage(8,pic8)">
+													<button class="setupBTN" type="button" onclick="$('#myFileInput8').trigger('click');">Tortoisesoft Enterprises &copy; 2016</button>
+													<span id="08"></span>
+												</article>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<input type="file" id="fileElem" multiple accept="image/*" style="display:none" onchange="handleFiles(this.files)">
+
+			<div class="container09" style="background: transparent url('{{pic09}}');">
+				<article class="input_boxes">
+					<input onchange="handleFiles(this.files,9)" type="file" accept="image/*" style="display: none; visibility: hidden;" id="myFileInput09" />
+					<input class="setup" type="text" ng-model="pic9" placeholder="Paste an image URL in these boxes" ng-change="setHtmlImage(9,pic9)">
+					<button class="setupBTN" type="button" onclick="$('#myFileInput09').trigger('click');">Also one 'Panorama' per set !</button>
+					<!--
+				<span id="09">{{pic[09]}} pic09 panorama {{pic09}}</span>
+-->
+				</article>
+			</div>
+		</div>
+	</div>
+
+	<div id="message">
+		Created by Simon Anthony kcard@torty.org.uk for Katie !
+	</div>
+
+</body>
+
+</html>
